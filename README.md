@@ -1,4 +1,6 @@
 # Hangfire.Prometheus
+[![NuGet Package](https://img.shields.io/nuget/v/Hangfire.Prometheus.Exporter.svg)](https://www.nuget.org/packages/Hangfire.Prometheus.Exporter)
+[![codecov](https://codecov.io/gh/nicolaj-hartmann/Hangfire.Prometheus/graph/badge.svg?token=M8W3f2PlZu)](https://codecov.io/gh/nicolaj-hartmann/Hangfire.Prometheus)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fnicolaj-hartmann%2FHangfire.Prometheus.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fnicolaj-hartmann%2FHangfire.Prometheus?ref=badge_shield)
 
 Simple plugin for .NET Core applications to export Hangfire stats to Prometheus.
