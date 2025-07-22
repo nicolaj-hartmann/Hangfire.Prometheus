@@ -6,7 +6,7 @@
     <Version>1.0.0</Version>
     <Authors>nicolaj-hartmann</Authors>
     <Company>nicolaj-hartmann</Company>
-    <PackageId>Hangfire.Prometheus.Exporter</PackageId>
+    <PackageId>Ext.Hangfire.Prometheus</PackageId>
     <Product />
     <Description>Simple plugin for .NET Core applications to export Hangfire stats to Prometheus.</Description>
     <Copyright>(c) 2025 Nicolaj Hartmann</Copyright>
