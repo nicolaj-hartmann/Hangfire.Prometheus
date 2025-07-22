@@ -1,4 +1,6 @@
 # Hangfire.Prometheus
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fnicolaj-hartmann%2FHangfire.Prometheus.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fnicolaj-hartmann%2FHangfire.Prometheus?ref=badge_shield)
+
 Simple plugin for .NET Core applications to export Hangfire stats to Prometheus.
 
 # Initial Kudos
@@ -59,3 +61,7 @@ Simultaneous scrapes proceed at the same time. Care should be taken when setting
 
 # Multiple Servers
 This plugin uses Hangfire job storage to retrieve job statistics. If multiple Hangfire servers are using the same job storage only a single instance should be exporting Hangfire metrics or only a single instance must be scraped. 
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fnicolaj-hartmann%2FHangfire.Prometheus.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fnicolaj-hartmann%2FHangfire.Prometheus?ref=badge_large)
