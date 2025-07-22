@@ -13,7 +13,7 @@
     <PackageProjectUrl>https://github.com/nicolaj-hartmann/Hangfire.Prometheus</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nicolaj-hartmann/Hangfire.Prometheus</RepositoryUrl>
     <RepositoryType>github</RepositoryType>
-    <PackageLicenseUrl>https://github.com/nicolaj-hartmann/Hangfire.Prometheus/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
