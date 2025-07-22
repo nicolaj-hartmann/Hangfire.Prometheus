@@ -9,7 +9,7 @@
             var hangfireStats = hangfireJobStorage.GetMonitoringApi().GetStatistics();
 
             using var storageConnection = hangfireJobStorage.GetConnection();
-            long retryJobs = storageConnection.GetAllItemsFromSet(RetrySetName).Count;
+            var retryJobs = storageConnection.GetAllItemsFromSet(RetrySetName).Count;
 
             return new HangfireJobStatistics
             {
