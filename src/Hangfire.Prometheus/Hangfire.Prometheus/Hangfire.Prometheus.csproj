@@ -3,21 +3,25 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.1.0</Version>
-    <Authors>fiftyonefifty</Authors>
-    <Company>fiftyonefifty</Company>
+    <Version>1.0.0</Version>
+    <Authors>nicolaj-hartmann</Authors>
+    <Company>nicolaj-hartmann</Company>
+    <PackageId>Hangfire.Prometheus.Exporter</PackageId>
     <Product />
     <Description>Simple plugin for .NET Core applications to export Hangfire stats to Prometheus.</Description>
-    <Copyright>(c) 2019 fiftyonefifty</Copyright>
-    <PackageProjectUrl>https://github.com/fiftyonefifty/Hangfire.Prometheus</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/fiftyonefifty/Hangfire.Prometheus</RepositoryUrl>
+    <Copyright>(c) 2025 Nicolaj Hartmann</Copyright>
+    <PackageProjectUrl>https://github.com/nicolaj-hartmann/Hangfire.Prometheus</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/nicolaj-hartmann/Hangfire.Prometheus</RepositoryUrl>
     <RepositoryType>github</RepositoryType>
-    <PackageLicenseUrl>https://github.com/fiftyonefifty/Hangfire.Prometheus/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl>https://github.com/nicolaj-hartmann/Hangfire.Prometheus/blob/master/LICENSE</PackageLicenseUrl>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Hangfire" Version="1.7.1" />
-    <PackageReference Include="prometheus-net" Version="3.1.4" />
+    <PackageReference Include="Hangfire.Core" Version="1.8.20" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
+    <PackageReference Include="prometheus-net" Version="8.2.1" />
   </ItemGroup>
 
 </Project>

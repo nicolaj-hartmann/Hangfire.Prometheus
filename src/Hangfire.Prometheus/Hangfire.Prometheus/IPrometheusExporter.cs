@@ -1,6 +1,6 @@
 ﻿namespace Hangfire.Prometheus
 {
-    interface IPrometheusExporter
+    public interface IPrometheusExporter
     {
         /// <summary>
         /// Exports current Hangfire job statistics into Prometheus metrics.

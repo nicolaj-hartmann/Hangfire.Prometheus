@@ -1,6 +1,11 @@
 # Hangfire.Prometheus
 Simple plugin for .NET Core applications to export Hangfire stats to Prometheus.
 
+# Initial Kudos
+
+This plugin was extended based on [Hangfire.Prometheus](https://github.com/fiftyonefifty/Hangfire.Prometheus/tree/master).
+All credits go to [fiftyonefifty](https://github.com/fiftyonefifty) for the original work.
+
 # Description
 The plugin uses the Hangfire JobStorage class to export metric "hangfire_job_count" using "state" label to indicate jobs in various states. The metrics are updated before every scrape. The states exported are:
 

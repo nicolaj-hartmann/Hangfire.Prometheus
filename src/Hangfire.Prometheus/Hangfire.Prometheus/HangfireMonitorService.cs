@@ -1,37 +1,25 @@
-﻿using Hangfire.Storage;
-using Hangfire.Storage.Monitoring;
-
-namespace Hangfire.Prometheus
+﻿namespace Hangfire.Prometheus
 {
-    public class HangfireMonitorService : IHangfireMonitorService
+    public class HangfireMonitorService(JobStorage hangfireJobStorage) : IHangfireMonitorService
     {
-        private const string retrySetName = "retries";
-        private JobStorage _hangfireJobStorage;
-
-        public HangfireMonitorService(JobStorage hangfireJobStorage)
-        {
-            _hangfireJobStorage = hangfireJobStorage;
-        }
+        private const string RetrySetName = "retries";
         
         public HangfireJobStatistics GetJobStatistics()
         {
-            StatisticsDto hangfireStats = _hangfireJobStorage.GetMonitoringApi().GetStatistics();
+            var hangfireStats = hangfireJobStorage.GetMonitoringApi().GetStatistics();
 
-            using (IStorageConnection storageConnection = _hangfireJobStorage.GetConnection())
+            using var storageConnection = hangfireJobStorage.GetConnection();
+            long retryJobs = storageConnection.GetAllItemsFromSet(RetrySetName).Count;
+
+            return new HangfireJobStatistics
             {
-
-                long retryJobs = storageConnection.GetAllItemsFromSet(retrySetName).Count;
-
-                return new HangfireJobStatistics
-                {
-                    Failed = hangfireStats.Failed,
-                    Enqueued = hangfireStats.Enqueued,
-                    Scheduled = hangfireStats.Scheduled,
-                    Processing = hangfireStats.Processing,
-                    Succeeded = hangfireStats.Succeeded,
-                    Retry = retryJobs
-                };
-            }
+                Failed = hangfireStats.Failed,
+                Enqueued = hangfireStats.Enqueued,
+                Scheduled = hangfireStats.Scheduled,
+                Processing = hangfireStats.Processing,
+                Succeeded = hangfireStats.Succeeded,
+                Retry = retryJobs
+            };
         }
     }
 }

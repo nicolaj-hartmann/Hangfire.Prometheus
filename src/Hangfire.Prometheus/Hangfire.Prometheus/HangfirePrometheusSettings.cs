@@ -5,17 +5,20 @@ namespace Hangfire.Prometheus
 {
     public class HangfirePrometheusSettings
     {
+        public HangfirePrometheusSettings()
+        {
+            CollectorRegistry = Metrics.DefaultRegistry;
+            FailScrapeOnException = true;
+        }
+        
         /// <summary>
         /// Prometheus collector registry to use. Defaults to Metrics.DefaultRegistry.
         /// </summary>
         /// <exception cref="ArgumentNullException">Thrown if CollectorRegistry is set to null.</exception>
         public CollectorRegistry CollectorRegistry
         {
-            get { return _collectorRegistry; }
-            set
-            {
-                _collectorRegistry = value ?? throw new ArgumentNullException();
-            }
+            get => _collectorRegistry;
+            set => _collectorRegistry = value ?? throw new ArgumentNullException();
         }
         private CollectorRegistry _collectorRegistry;
 
@@ -25,11 +28,5 @@ namespace Hangfire.Prometheus
         /// collection is ignored and metric values will not be updated.
         /// </summary>
         public bool FailScrapeOnException { get; set; }
-
-        public HangfirePrometheusSettings()
-        {
-            CollectorRegistry = Metrics.DefaultRegistry;
-            FailScrapeOnException = true;
-        }
     }
 }

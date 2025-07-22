@@ -1,7 +1,5 @@
 ﻿using Prometheus;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace Hangfire.Prometheus.UnitTests
@@ -11,7 +9,7 @@ namespace Hangfire.Prometheus.UnitTests
         [Fact]
         public void SettingsDefaultsTest()
         {
-            HangfirePrometheusSettings settings = new HangfirePrometheusSettings();
+            var settings = new HangfirePrometheusSettings();
             Assert.Same(Metrics.DefaultRegistry, settings.CollectorRegistry);
             Assert.True(settings.FailScrapeOnException);
         }
@@ -19,8 +17,8 @@ namespace Hangfire.Prometheus.UnitTests
         [Fact]
         public void SettingCustomRegistryPositive()
         {
-            HangfirePrometheusSettings settings = new HangfirePrometheusSettings();
-            CollectorRegistry collectorRegistry = Metrics.NewCustomRegistry();
+            var settings = new HangfirePrometheusSettings();
+            var collectorRegistry = Metrics.NewCustomRegistry();
             settings.CollectorRegistry = collectorRegistry;
             Assert.Same(collectorRegistry, settings.CollectorRegistry);
         }
@@ -28,15 +26,17 @@ namespace Hangfire.Prometheus.UnitTests
         [Fact]
         public void SettingCustomRegistryToNullThrowsException()
         {
-            HangfirePrometheusSettings settings = new HangfirePrometheusSettings();
+            var settings = new HangfirePrometheusSettings();
             Assert.Throws<ArgumentNullException>(() => settings.CollectorRegistry = null);
         }
 
         [Fact]
         public void SettingFailScrapeOnExceptionToNonDefault()
         {
-            HangfirePrometheusSettings settings = new HangfirePrometheusSettings();
-            settings.FailScrapeOnException = false;
+            var settings = new HangfirePrometheusSettings
+            {
+                FailScrapeOnException = false
+            };
             Assert.False(settings.FailScrapeOnException);
         }
     }

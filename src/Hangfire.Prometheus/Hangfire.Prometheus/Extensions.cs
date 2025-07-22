@@ -1,21 +1,31 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Prometheus;
+﻿using Prometheus;
 using System;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Hangfire.Prometheus
 {
     public static class Extensions
     {
+        
         /// <summary>
         /// Initializes Prometheus Hangfire Exporter using current Hangfire job storage and default metrics registry.
         /// </summary>
         /// <param name="app">IApplicationBuilder instance</param>
         /// <returns>Provided instance of IApplicationBuilder</returns>
-        public static IApplicationBuilder UsePrometheusHangfireExporter(this IApplicationBuilder app, HangfirePrometheusSettings settings = null)
-        {
-            settings = settings ?? new HangfirePrometheusSettings();
+        public static IApplicationBuilder UsePrometheusHangfireExporter(this IApplicationBuilder app)
+            => UsePrometheusHangfireExporter(app, new HangfirePrometheusSettings());
 
-            JobStorage js = (JobStorage)app.ApplicationServices.GetService(typeof(JobStorage));
+        /// <summary>
+        /// Initializes Prometheus Hangfire Exporter using current Hangfire job storage and default metrics registry.
+        /// </summary>
+        /// <param name="app">IApplicationBuilder instance</param>
+        /// <param name="settings">Settings instance</param>
+        /// <returns>Provided instance of IApplicationBuilder</returns>
+        public static IApplicationBuilder UsePrometheusHangfireExporter(this IApplicationBuilder app,
+            HangfirePrometheusSettings settings)
+        {
+            var js = app.ApplicationServices.GetService<JobStorage>();
             if (js == null)
             {
                 throw new Exception("Cannot find Hangfire JobStorage class.");

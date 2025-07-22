@@ -10,26 +10,26 @@ namespace Hangfire.Prometheus.UnitTests
 {
     public class PrometheusExporterTests
     {
-        private HangfirePrometheusExporter _classUnderTest;
+        private readonly HangfirePrometheusExporter _classUnderTest;
 
-        private Mock<IHangfireMonitorService> _mockHangfireMonitor;
+        private readonly Mock<IHangfireMonitorService> _mockHangfireMonitor;
 
-        private IFixture _autoFixture;
+        private readonly IFixture _autoFixture;
 
-        CollectorRegistry _collectorRegistry;
+        private readonly CollectorRegistry _collectorRegistry;
 
-        HangfirePrometheusSettings _settings;
+        private readonly HangfirePrometheusSettings _settings;
 
-        private readonly string _metricName = "hangfire_job_count";
-        private readonly string _metricHelp = "Number of Hangfire jobs";
-        private readonly string _stateLabelName = "state";
+        private const string MetricName = "hangfire_job_count";
+        private const string MetricHelp = "Number of Hangfire jobs";
+        private const string StateLabelName = "state";
 
-        private readonly string _failedLabelValue = "failed";
-        private readonly string _enqueuedLabelValue = "enqueued";
-        private readonly string _scheduledLabelValue = "scheduled";
-        private readonly string _processingLabelValue = "processing";
-        private readonly string _succeededLabelValue = "succeeded";
-        private readonly string _retryLabelValue = "retry";
+        private const string FailedLabelValue = "failed";
+        private const string EnqueuedLabelValue = "enqueued";
+        private const string ScheduledLabelValue = "scheduled";
+        private const string ProcessingLabelValue = "processing";
+        private const string SucceededLabelValue = "succeeded";
+        private const string RetryLabelValue = "retry";
 
         public PrometheusExporterTests()
         {
@@ -53,7 +53,7 @@ namespace Hangfire.Prometheus.UnitTests
         [Fact]
         public void MetricsWithAllStatesGetCreated()
         {
-            HangfireJobStatistics hangfireJobStatistics = _autoFixture.Create<HangfireJobStatistics>();
+            var hangfireJobStatistics = _autoFixture.Create<HangfireJobStatistics>();
             PerformMetricsTest(hangfireJobStatistics);
             _mockHangfireMonitor.Verify(x => x.GetJobStatistics(), Times.Once);
 
@@ -62,10 +62,10 @@ namespace Hangfire.Prometheus.UnitTests
         [Fact]
         public void MetricsWithAllStatesGetUpdatedOnSubsequentCalls()
         {
-            int count = 10;
-            for (int i = 0; i < count; i++)
+            var count = 10;
+            for (var i = 0; i < count; i++)
             {
-                HangfireJobStatistics hangfireJobStatistics = _autoFixture.Create<HangfireJobStatistics>();
+                var hangfireJobStatistics = _autoFixture.Create<HangfireJobStatistics>();
                 PerformMetricsTest(hangfireJobStatistics);
             }
 
@@ -76,10 +76,10 @@ namespace Hangfire.Prometheus.UnitTests
         public void MetricsShouldNotGetPublishedFirstTimeOnException()
         {
             _mockHangfireMonitor.Setup(x => x.GetJobStatistics()).Throws(new Exception());
-            string actual = GetPrometheusContent();
+            var actual = GetPrometheusContent();
 
             //The metric description will get published regardless, so we have to test for the labeled metrics.
-            Assert.DoesNotContain($"{_metricName}{{{_stateLabelName}=\"", actual);
+            Assert.DoesNotContain($"{MetricName}{{{StateLabelName}=\"", actual);
         }
 
         [Fact]
@@ -87,7 +87,7 @@ namespace Hangfire.Prometheus.UnitTests
         {
             _settings.FailScrapeOnException = false;
 
-            HangfireJobStatistics hangfireJobStatistics = _autoFixture.Create<HangfireJobStatistics>();
+            var hangfireJobStatistics = _autoFixture.Create<HangfireJobStatistics>();
             PerformMetricsTest(hangfireJobStatistics);
 
             _mockHangfireMonitor.Setup(x => x.GetJobStatistics()).Throws(new Exception());
@@ -101,15 +101,15 @@ namespace Hangfire.Prometheus.UnitTests
         }
 
         [Fact]
-        public void ScrapeShoudFailOnExceptionWhenSettingEnabled()
+        public void ScrapeShouldFailOnExceptionWhenSettingEnabled()
         {
-            HangfireJobStatistics hangfireJobStatistics = _autoFixture.Create<HangfireJobStatistics>();
+            var hangfireJobStatistics = _autoFixture.Create<HangfireJobStatistics>();
             PerformMetricsTest(hangfireJobStatistics);
 
             _settings.FailScrapeOnException = true;
-            Exception exToThrow = new Exception();
+            var exToThrow = new Exception();
             _mockHangfireMonitor.Setup(x => x.GetJobStatistics()).Throws(exToThrow);
-            ScrapeFailedException ex = Assert.Throws<ScrapeFailedException>(() => _classUnderTest.ExportHangfireStatistics());
+            var ex = Assert.Throws<ScrapeFailedException>(() => _classUnderTest.ExportHangfireStatistics());
             Assert.Same(exToThrow, ex.InnerException);
             Assert.Equal("Scrape failed due to exception. See InnerException for details.", ex.Message);
         }
@@ -123,10 +123,10 @@ namespace Hangfire.Prometheus.UnitTests
 
         private void VerifyPrometheusMetrics(HangfireJobStatistics hangfireJobStatistics)
         {
-            List<string> expectedStrings = CreateExpectedStrings(hangfireJobStatistics);
-            string actual = GetPrometheusContent();
+            var expectedStrings = CreateExpectedStrings(hangfireJobStatistics);
+            var actual = GetPrometheusContent();
 
-            foreach (string expected in expectedStrings)
+            foreach (var expected in expectedStrings)
             {
                 Assert.Contains(expected, actual);
             }
@@ -134,34 +134,32 @@ namespace Hangfire.Prometheus.UnitTests
 
         private List<string> CreateExpectedStrings(HangfireJobStatistics hangfireJobStatistics)
         {
-            List<string> expectedStrings = new List<string>();
-            expectedStrings.Add($"# HELP {_metricName} {_metricHelp}\n# TYPE {_metricName} gauge");
-            expectedStrings.Add(GetMetricString(_failedLabelValue, hangfireJobStatistics.Failed));
-            expectedStrings.Add(GetMetricString(_enqueuedLabelValue, hangfireJobStatistics.Enqueued));
-            expectedStrings.Add(GetMetricString(_scheduledLabelValue, hangfireJobStatistics.Scheduled));
-            expectedStrings.Add(GetMetricString(_processingLabelValue, hangfireJobStatistics.Processing));
-            expectedStrings.Add(GetMetricString(_succeededLabelValue, hangfireJobStatistics.Succeeded));
-            expectedStrings.Add(GetMetricString(_retryLabelValue, hangfireJobStatistics.Retry));
+            var expectedStrings = new List<string>
+            {
+                $"# HELP {MetricName} {MetricHelp}\n# TYPE {MetricName} gauge",
+                GetMetricString(FailedLabelValue, hangfireJobStatistics.Failed),
+                GetMetricString(EnqueuedLabelValue, hangfireJobStatistics.Enqueued),
+                GetMetricString(ScheduledLabelValue, hangfireJobStatistics.Scheduled),
+                GetMetricString(ProcessingLabelValue, hangfireJobStatistics.Processing),
+                GetMetricString(SucceededLabelValue, hangfireJobStatistics.Succeeded),
+                GetMetricString(RetryLabelValue, hangfireJobStatistics.Retry)
+            };
             return expectedStrings;
         }
 
-        private string GetMetricString(string labelValue, double metricValue)
+        private static string GetMetricString(string labelValue, double metricValue)
         {
-            return $"{_metricName}{{{_stateLabelName}=\"{labelValue}\"}} {metricValue}";
+            return $"{MetricName}{{{StateLabelName}=\"{labelValue}\"}} {metricValue}";
         }
 
         private string GetPrometheusContent()
         {
-            string content;
-            using (MemoryStream myStream = new MemoryStream())
-            {
-                _collectorRegistry.CollectAndExportAsTextAsync(myStream).Wait();
-                myStream.Seek(0, SeekOrigin.Begin);
-                using (StreamReader sr = new StreamReader(myStream))
-                {
-                    content = sr.ReadToEnd();
-                }
-            }
+            using var myStream = new MemoryStream();
+            _collectorRegistry.CollectAndExportAsTextAsync(myStream).Wait();
+            myStream.Seek(0, SeekOrigin.Begin);
+            using var sr = new StreamReader(myStream);
+            var content = sr.ReadToEnd();
+
             return content;
         }
     }

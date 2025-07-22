@@ -10,14 +10,13 @@ namespace Hangfire.Prometheus.UnitTests
 {
     public class HangfireMonitorTests
     {
-        private static readonly string retryKey = "retries";
+        private const string RetryKey = "retries";
 
-        private Fixture _fixture = new Fixture();
-        private StatisticsDto _expectedStats;
-        private HashSet<string> _expectedRetrySet;
-        Mock<JobStorage> _mockStorage;
-        IHangfireMonitorService _hangfireMonitorService;
-        Mock<IStorageConnection> _storageConnection;
+        private readonly Fixture _fixture = new();
+        private readonly StatisticsDto _expectedStats;
+        private readonly HashSet<string> _expectedRetrySet;
+        private readonly IHangfireMonitorService _hangfireMonitorService;
+        private readonly Mock<IStorageConnection> _storageConnection;
 
         public HangfireMonitorTests()
         {
@@ -26,23 +25,23 @@ namespace Hangfire.Prometheus.UnitTests
             _expectedRetrySet.AddMany(() => _fixture.Create<string>(), new Random().Next(100));
 
             _storageConnection = new Mock<IStorageConnection>();
-            _storageConnection.Setup(x => x.GetAllItemsFromSet(retryKey)).Returns(_expectedRetrySet);
+            _storageConnection.Setup(x => x.GetAllItemsFromSet(RetryKey)).Returns(_expectedRetrySet);
             _storageConnection.Setup(x => x.Dispose());
 
-            Mock<IMonitoringApi> mockMonitoringApi = new Mock<IMonitoringApi>();
+            var mockMonitoringApi = new Mock<IMonitoringApi>();
             mockMonitoringApi.Setup(x => x.GetStatistics()).Returns(_expectedStats);
 
-            _mockStorage = new Mock<JobStorage>();
-            _mockStorage.Setup(x => x.GetConnection()).Returns(_storageConnection.Object);
-            _mockStorage.Setup(x => x.GetMonitoringApi()).Returns(mockMonitoringApi.Object);
+            var mockStorage = new Mock<JobStorage>();
+            mockStorage.Setup(x => x.GetConnection()).Returns(_storageConnection.Object);
+            mockStorage.Setup(x => x.GetMonitoringApi()).Returns(mockMonitoringApi.Object);
 
-            _hangfireMonitorService = new HangfireMonitorService(_mockStorage.Object);
+            _hangfireMonitorService = new HangfireMonitorService(mockStorage.Object);
         }
 
         [Fact]
         public void ShouldGetNumberOfJobs()
         {
-            HangfireJobStatistics actual = _hangfireMonitorService.GetJobStatistics();
+            var actual = _hangfireMonitorService.GetJobStatistics();
             Assert.Equal(_expectedStats.Failed, actual.Failed);
             Assert.Equal(_expectedStats.Enqueued, actual.Enqueued);
             Assert.Equal(_expectedStats.Scheduled, actual.Scheduled);
@@ -56,7 +55,6 @@ namespace Hangfire.Prometheus.UnitTests
         {
             _hangfireMonitorService.GetJobStatistics();
             _storageConnection.Verify(x => x.Dispose(), Times.AtLeastOnce);
-
         }
     }
 }
