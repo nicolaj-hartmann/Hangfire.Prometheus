@@ -1,7 +1,9 @@
+next-version: 1.0.1
 mode: ContinuousDeployment
 branches:
   main:
     label: 'beta'
     increment: Patch
+    
   develop:
     increment: Minor
