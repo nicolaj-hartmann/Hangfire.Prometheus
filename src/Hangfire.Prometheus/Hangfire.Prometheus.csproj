@@ -7,7 +7,7 @@
         <Authors>nicolaj-hartmann</Authors>
         <Company>nicolaj-hartmann</Company>
         <PackageId>Ext.Hangfire.Prometheus</PackageId>
-        <Product/>
+        <Product />
         <Description>Simple plugin for .NET Core applications to export Hangfire stats to Prometheus.</Description>
         <Copyright>(c) 2025 Nicolaj Hartmann</Copyright>
         <PackageProjectUrl>https://github.com/nicolaj-hartmann/Hangfire.Prometheus</PackageProjectUrl>
@@ -19,13 +19,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Hangfire.Core" Version="1.8.20"/>
-        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2"/>
-        <PackageReference Include="prometheus-net" Version="8.2.1"/>
+        <PackageReference Include="Hangfire.Core" Version="1.8.20" />
+        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.7" />
+        <PackageReference Include="prometheus-net" Version="8.2.1" />
     </ItemGroup>
     
     <ItemGroup>
-        <None Include="../../README.md" Pack="true" PackagePath="\"/>
+        <None Include="../../README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 </Project>
